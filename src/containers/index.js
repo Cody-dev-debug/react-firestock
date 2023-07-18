@@ -5,11 +5,4 @@ import Image from "./Image";
 import NotFound from "./NotFound";
 import Profile from "./Profile";
 
-export {
-    Home,
-    MyStocks,
-    App,
-    Image,
-    NotFound,
-    Profile,
-}
+export { Home, MyStocks, App, Image, NotFound, Profile };
