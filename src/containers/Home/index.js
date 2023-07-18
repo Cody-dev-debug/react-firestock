@@ -1,21 +1,17 @@
-import './styles.css';
-import { Card, Navbar, UploadForm } from '../components';
-import { useContext, useEffect, useState } from 'react';
-import { SET_COLLAPSED } from '../constants';
-import { Context } from '../context';
-import Firestore from '../handlers/firestore';
-import Storage from '../handlers/storage';
+import { useContext, useState } from 'react';
 
-const { writeDocs, updateDocs } = Firestore
+import { ListItems, UploadForm } from '../../components';
+import { SET_COLLAPSED } from '../../constants';
+import { Context } from '../../context';
+import { Firestore, Storage } from '../../handlers';
+
+const { writeDocs } = Firestore
 const { uploadFile,downloadFile } = Storage
 
-const App = () => {
-  const {state, dispatch,read}= useContext(Context);
-  const [input,setInput] = useState({ title:null, file:null, path:null });
 
-  useEffect(() => {
-    updateDocs(read);
-  },[])
+const Home = () => {
+  const { state, dispatch }= useContext(Context);
+  const [input,setInput] = useState({ title:null, file:null, path:null });
 
   const toggle = () => 
     dispatch({
@@ -35,20 +31,23 @@ const App = () => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
+    if (!state.isLoggedIn){
+      console.error("Please Login First")
+    }
+    const username = state.currentUser?.displayName?.split(" ").map(s => s.toLowerCase()).join("");
 
     uploadFile(input,"stocks")
       .then(downloadFile)
       .then(url => {
         toggle()
-        writeDocs({ ...input, path: url},"stocks").then(() =>{
+        writeDocs({ ...input, path: url, user: username},"stocks").then(() =>{
           setInput({ title:null, file:null, path:null })
         })
       })
   }
-
   return (
-    <div className="App">
-      <Navbar/>
+    <div className="home">
+      
       <div className="container text-center mt-5">
         <button className={state.isCollapsed? 'btn btn-success float-end': 'btn btn-danger float-end'} onClick={toggle}>{state.isCollapsed ? "Add Image" : "Close"}</button>
         <div className='mb-1 clearfix'></div>
@@ -58,16 +57,10 @@ const App = () => {
           input={input}
         />
         <h1>Gallery</h1>
-        <div className="row row-gap-5">
-          {state.items.map((item,idx) => (
-            <div key={idx+1} className="col mt-2 d-flex justify-content-center">
-              <Card file={item} />
-            </div>
-          ))}
-        </div>
+        <ListItems />
       </div>
     </div>
   );
 }
 
-export default App;
+export default Home;

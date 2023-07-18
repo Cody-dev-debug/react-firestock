@@ -1,8 +1,8 @@
-import { SET_COLLAPSED, SET_ITEM, SET_ITEMS} from "./constants";
+import { SET_COLLAPSED, SET_ITEMS, SET_USER} from "./constants";
 
 export const initialState = {
-    isLoggedIn : true,
-    userName : 'Aditya',
+    isLoggedIn : false,
+    currentUser : "",
     items : [],
     count : 0,
     isCollapsed : true,
@@ -10,12 +10,11 @@ export const initialState = {
 
 function reducer(state, action) {
     switch(action.type){
-        case SET_ITEM : {
+        case SET_USER : {
             return {
                 ...state,
-                items : [ ...state.items, action.payload],
-                isCollapsed : true,
-                count : state.count+1,
+                currentUser : action.payload.user,
+                isLoggedIn : !(action.payload.user === ''),
             }
         }
         case SET_ITEMS : {

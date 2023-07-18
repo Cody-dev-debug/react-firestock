@@ -15,9 +15,10 @@ const Firestore = {
     },
     writeDocs : (...args) => {
         const [inputs,collection_name] = args
+        const { title, path, user} = inputs
         return new Promise(async resolve => {
             try {
-                const inputObj = { title: inputs.title, path: inputs.path,createdAt : serverTimestamp()}
+                const inputObj = { title, path, user ,createdAt : serverTimestamp()}
                 await setDoc( doc(collection(db,collection_name)),inputObj)
                 resolve("New Stock added")
             } catch (e) {
@@ -33,7 +34,7 @@ const Firestore = {
                 const colRef = collection(db, collection_name);
                 const colSnap = await getDocs(colRef);
                 colSnap.forEach( doc => {
-                    const d = {...doc.data()}
+                    const d = {...doc.data(), id: doc.id}
                     docs.push(d);
                 })
                 resolve(docs)
