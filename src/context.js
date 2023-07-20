@@ -19,6 +19,6 @@ const Provider = ({ children }) => {
     </Context.Provider>
   );
 };
-export const useGlobalContext = () => useContext(Context)
+export const useGlobalContext = () => useContext(Context);
 
 export default Provider;

@@ -13,6 +13,8 @@
 
 # misc
 .env
+.firebase
+.firebaserc
 .DS_Store
 .env.local
 .env.development.local

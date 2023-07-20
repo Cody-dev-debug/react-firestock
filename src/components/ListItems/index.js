@@ -1,24 +1,31 @@
-import { useContext } from "react"
-import { Context } from '../../context';
+import { useGlobalContext } from "../../context";
 import Card from "./Card";
-import { LoaderOrError } from "../../components";
+import { Loader } from "../../components";
 
 const ListItems = (props) => {
-    let { filter } = props;
-    if(!filter) {
-        filter = () => true
-    }
-    const {state} =useContext(Context)
-    return (
-        <LoaderOrError loading={state.loading} error={state.error} >
-            <div className="row row-gap-5">
-                {state.items.filter(filter).sort((a, b) => (a.title > b.title ? 1 : 1)).map((item,idx) => (
-                    <div key={idx+1} className="col mt-2 d-flex justify-content-center">
-                        <Card file={item} />
-                    </div>
-                ))}
+  let { userFilter } = props;
+
+  const { state } = useGlobalContext();
+
+  if (!userFilter) {
+    userFilter = () => true;
+  }
+  return (
+    <Loader loading={state.loading} error={state.error}>
+      <div className="row row-gap-5">
+        {state.items
+          .filter((obj) => userFilter(obj) && obj.title.includes(state.search))
+          .sort((a, b) => (a.title > b.title ? 1 : -1))
+          .map((item, idx) => (
+            <div
+              key={idx + 1}
+              className="col mt-2 d-flex justify-content-center"
+            >
+              <Card file={item} />
             </div>
-        </LoaderOrError>
-    )
-}
+          ))}
+      </div>
+    </Loader>
+  );
+};
 export default ListItems;

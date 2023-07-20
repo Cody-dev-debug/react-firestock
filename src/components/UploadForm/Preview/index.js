@@ -2,15 +2,15 @@ const Preview = (props) => {
   const { path } = props;
   return (
     path && (
-      <div
+      <img
+        src={path}
+        alt=" "
         className="rounded m-4"
         style={{
-          width: "30%",
           height: "300px",
-          backgroundImage: `url(${path}`,
           backgroundSize: "cover",
         }}
-      ></div>
+      />
     )
   );
 };

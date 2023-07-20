@@ -3,6 +3,7 @@ import {
   SET_ERROR,
   SET_ITEMS,
   SET_LOADING,
+  SET_SEARCH,
   SET_USER,
 } from "./constants";
 
@@ -13,6 +14,7 @@ export const initialState = {
   currentUser: "",
   items: [],
   isCollapsed: true,
+  search: "",
 };
 
 function reducer(state, action) {
@@ -21,6 +23,7 @@ function reducer(state, action) {
       return {
         ...state,
         error: action.payload.error,
+        loading: false,
       };
     }
     case SET_LOADING: {
@@ -50,6 +53,12 @@ function reducer(state, action) {
       return {
         ...state,
         isCollapsed: action.payload,
+      };
+    }
+    case SET_SEARCH: {
+      return {
+        ...state,
+        search: action.payload.search,
       };
     }
     default: {

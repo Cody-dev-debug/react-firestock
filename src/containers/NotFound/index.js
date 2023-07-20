@@ -3,10 +3,11 @@ import error from "../../assets/error.png";
 
 const NotFound = () => {
   const navigate = useNavigate();
+
   return (
     <div className="not-found">
       <div className="container text-center mt-5">
-        <button className="btn btn-link mb-5" onClick={() => navigate(-1)}>
+        <button className="btn btn-link mb-5" onClick={() => navigate("/")}>
           Back
         </button>
         <div className="d-flex flex-column justify-content-center align-items-center">

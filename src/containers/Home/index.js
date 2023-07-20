@@ -1,15 +1,15 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 
 import { ListItems, UploadForm } from "../../components";
-import { SET_COLLAPSED, SET_LOADING } from "../../constants";
-import { Context } from "../../context";
+import { SET_COLLAPSED, SET_ERROR, SET_LOADING } from "../../constants";
+import { useGlobalContext } from "../../context";
 import { Firestore, Storage } from "../../handlers";
 
 const { writeDocs } = Firestore;
 const { uploadFile, downloadFile } = Storage;
 
 const Home = () => {
-  const { state, dispatch } = useContext(Context);
+  const { state, dispatch } = useGlobalContext();
   const [input, setInput] = useState({ title: "", file: null, path: "" });
 
   const toggle = () =>
@@ -28,8 +28,7 @@ const Home = () => {
           file: e.target.files[0],
           path: URL.createObjectURL(e.target.files[0]),
         });
-      else 
-        setInput({ ...input, file: null, path: null });
+      else setInput({ ...input, file: null, path: null });
     } else {
       setInput({ ...input, title: e.target.value });
     }
@@ -38,7 +37,9 @@ const Home = () => {
   const handleOnSubmit = (e) => {
     e.preventDefault();
     if (!state.isLoggedIn) {
+      dispatch({ type: SET_ERROR, payload: { error: "Please Login First" } });
       console.error("Please Login First");
+      return;
     }
     const username = state.currentUser?.displayName
       ?.split(" ")
@@ -51,12 +52,13 @@ const Home = () => {
     })
       .then(downloadFile)
       .then((url) => {
-        writeDocs({ ...input, path: url, user: username }, "stocks").then(
-          () => {
+        writeDocs({ ...input, path: url, user: username }, "stocks")
+          .then(() => {
             setInput({ title: "", file: null, path: "" });
-          }
-        );
-      });
+          })
+          .catch((error) => dispatch({ type: SET_ERROR, payload: { error } }));
+      })
+      .catch((error) => dispatch({ type: SET_ERROR, payload: { error } }));
   };
   return (
     <div className="home">

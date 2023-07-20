@@ -1,10 +1,17 @@
-import { useContext } from "react";
-import { Context } from "../../context";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+
+import { useGlobalContext } from "../../context";
 
 const Profile = () => {
   const {
     state: { items, currentUser },
-  } = useContext(Context);
+  } = useGlobalContext();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!currentUser) navigate("/*", { replace: true });
+  }, [currentUser]);
 
   const details = [
     { key: "name", value: currentUser?.displayName },
@@ -28,16 +35,16 @@ const Profile = () => {
       <div className="container text-center mt-5">
         <h1 className="text-center">Profile</h1>
         <hr style={{ width: "75%", margin: "3rem auto" }} />
-        <div className="d-flex justify-content-center align-items-center">
+        <div className="d-flex justify-content-center align-items-center flex-wrap">
           <img
             style={{ borderRadius: "4px " }}
             src={currentUser?.photoURL}
             alt={currentUser?.displayName}
             width="200"
             height="200"
-            className="mx-3"
+            className="mx-lg-3 my-3"
           />
-          <ul className="list-group mx-3" style={{ width: "30rem" }}>
+          <ul className="list-group mx-lg-3 my-3" style={{ width: "30rem" }}>
             {details.map((detail, idx) => (
               <li
                 key={idx}

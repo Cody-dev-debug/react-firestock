@@ -1,8 +1,8 @@
 import React from "react";
 import "./styles.css";
 
-const LoaderOrError = (props) => {
-  const { loading, error } = props;
+const Loader = (props) => {
+  const { loading } = props;
   return (
     <>
       {loading ? (
@@ -12,9 +12,8 @@ const LoaderOrError = (props) => {
       ) : (
         props.children
       )}
-      {error && <div className="error">{error}</div>}
     </>
   );
 };
 
-export default LoaderOrError;
+export default Loader;

@@ -1,12 +1,7 @@
-import {
-  Route,
-  Routes,
-  BrowserRouter as Router,
-  Navigate,
-} from "react-router-dom";
-import { useContext, useEffect } from "react";
+import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
+import { useEffect } from "react";
 
-import { Context } from "../../context";
+import { useGlobalContext } from "../../context";
 import { SET_LOADING, SET_USER } from "../../constants";
 import { Authenticate, Firestore } from "../../handlers";
 import { Navbar } from "../../components";
@@ -16,7 +11,7 @@ const { currentUser } = Authenticate;
 const { updateDocs } = Firestore;
 
 const App = () => {
-  const { state, dispatch, read } = useContext(Context);
+  const { state, dispatch, read } = useGlobalContext();
 
   useEffect(() => {
     currentUser((user) => dispatch({ type: SET_USER, payload: { user } }));

@@ -1,10 +1,10 @@
-import { useContext, useMemo } from "react";
+import { useMemo } from "react";
 import Preview from "./Preview";
-import { Context } from "../../context";
+import { useGlobalContext } from "../../context";
 
 const UploadForm = (props) => {
   const { input: inputs, onChange, onSubmit } = props;
-  const { state } = useContext(Context);
+  const { state } = useGlobalContext();
 
   const isDisabled = useMemo(() => {
     return !!Object.values(inputs).some((input) => !input);
@@ -18,7 +18,7 @@ const UploadForm = (props) => {
         <p className={`display-6 text-center ${inputs.path ? "mb-0" : "mb-3"}`}>
           Upload Stock Image
         </p>
-        <div className="d-flex align-items-center justify-content-center flex-row w-75">
+        <div className="d-flex align-items-center justify-content-center flex-row w-75 flex-wrap">
           <Preview path={inputs.path} />
           <div className="d-flex align-items-center justify-content-center flex-column">
             <form className="mb-2 text-start" onSubmit={onSubmit}>
@@ -47,6 +47,7 @@ const UploadForm = (props) => {
             </form>
           </div>
         </div>
+        {state.error && <div className="error">{state.error}</div>}
       </div>
     </>
   );

@@ -1,19 +1,18 @@
-import { useContext } from "react";
-
 import { ListItems } from "../../components";
-import { Context } from "../../context";
+import { useGlobalContext } from "../../context";
 
 const MyStocks = () => {
-  const { state } = useContext(Context);
+  const { state } = useGlobalContext();
 
-  const filter = (obj) =>
+  const userFilter = (obj) =>
     obj.user ===
     state.currentUser?.displayName?.split(" ")?.join("")?.toLowerCase();
+
   return (
     <div className="my-stocks">
       <div className="container text-center mt-5">
         <h1>Your Gallery</h1>
-        <ListItems filter={filter} />
+        <ListItems filter={userFilter} />
       </div>
     </div>
   );
